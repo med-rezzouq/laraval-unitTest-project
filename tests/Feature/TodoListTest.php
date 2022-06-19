@@ -18,7 +18,13 @@ class TodoListTest extends TestCase
      */
     public function test_fetch_todo_list()
     {
-        TodoList::create(['name' => 'my list']);
+        TodoList::factory()->create(['name' => 'my list']);
+
+
+        //-----whith this we can create duplicate records
+        // TodoList::factory()->count(2)->create(['name' => 'my list']);
+
+
         //preparation / prepare
 
         //action / perform
@@ -27,5 +33,6 @@ class TodoListTest extends TestCase
 
         //assertion /predict
         $this->assertEquals(1, count($response->json()));
+        $this->assertEquals('my list', $response->json()[0]['name']);
     }
 }
