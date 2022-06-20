@@ -34,7 +34,7 @@ class TodoListTest extends TestCase
 
 
         //action / perform
-        $response = $this->getJson(route('todo-list.store'));
+        $response = $this->getJson(route('todo-list.index'));
 
         //assertion /predict
         $this->assertEquals(1, count($response->json()));
@@ -60,5 +60,38 @@ class TodoListTest extends TestCase
 
 
         $this->assertEquals($response['name'],  $this->list->name);
+    }
+
+
+    public function test_store_new_todo_list()
+    {
+        //prepare
+        //make() will create  a record without storing it in database
+        $list = TodoList::factory()->make();
+        //action
+        $response = $this->postJson(route('todo-list.store', ['name' => $list->name]))->assertCreated()->json();
+
+
+        //assertion
+        // parameters aretable name and field record value
+        $this->assertEquals($list->name, $response['name']);
+        $this->assertDatabaseHas('todo_lists', ['name' => $list->name]);
+    }
+
+
+    public function test_while_storing_todo_list_name_field_is_required()
+    {
+        //prepare
+        //make() will create  a record without storing it in database
+        //action
+        $this->withExceptionHandling();
+        $response = $this->postJson(route('todo-list.store'))->assertUnprocessable()->assertJsonValidationErrors(['name']);
+
+
+
+        //assertion
+        // parameters aretable name and field record value
+        // $this->assertEquals($list->name, $response['name']);
+        // $this->assertDatabaseHas('todo_lists', ['name' => $list->name]);
     }
 }
