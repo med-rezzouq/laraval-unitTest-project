@@ -10,29 +10,55 @@ use Tests\TestCase;
 class TodoListTest extends TestCase
 {
     //this run migrate command to create and run all tables
+    //may be clean up the database
     use RefreshDatabase;
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function test_fetch_todo_list()
+
+    private $list;
+    //this function runs before any test function in this class its like construct
+    public function setUp(): void
     {
-        TodoList::factory()->create(['name' => 'my list']);
+        parent::setUp();
+        $this->list =  TodoList::factory()->create(['name' => 'my list']);
+    }
 
-
+    public function test_fetch_all_todo_list()
+    {
+        //preparation / prepare
         //-----whith this we can create duplicate records
         // TodoList::factory()->count(2)->create(['name' => 'my list']);
 
 
-        //preparation / prepare
-
         //action / perform
         $response = $this->getJson(route('todo-list.store'));
-
 
         //assertion /predict
         $this->assertEquals(1, count($response->json()));
         $this->assertEquals('my list', $response->json()[0]['name']);
+    }
+
+
+
+
+    public function test_fetch_single_todo_list()
+    {
+
+        //preparation / prepare
+        // $list = TodoList::factory()->create(); //replaces with setUp
+        //action / perform
+        $response = $this->getJson(route('todo-list.show',  $this->list->id))->assertOk()->json();
+        //assertion /predict
+        // $response->assertStatus(200);
+        //$response->assertOk();
+
+        //we can do also
+        // $response = $this->getJson(route('todo-list.show',  $list->id))->assertOk()->json();
+
+
+        $this->assertEquals($response['name'],  $this->list->name);
     }
 }
