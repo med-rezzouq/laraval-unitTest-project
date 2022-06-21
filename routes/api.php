@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TodoListController;
@@ -34,3 +35,5 @@ Route::post('task/completed', [TaskController::class, 'store'])->name('task.stor
 ///////////////register routes
 
 Route::post('/register', RegisterController::class)->name('user.register');
+
+Route::post('/login', LoginController::class)->name('user.login');
