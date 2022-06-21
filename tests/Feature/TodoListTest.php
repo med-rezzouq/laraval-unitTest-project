@@ -23,6 +23,7 @@ class TodoListTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->authUser();
         $this->list =  $this->createTodoList(['name' => 'my list']);
     }
 
