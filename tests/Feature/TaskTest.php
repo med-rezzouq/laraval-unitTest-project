@@ -20,8 +20,9 @@ class TaskTest extends TestCase
 
         //preparation
         $list = $this->createTodoList();
+        $list2 = $this->createTodoList();
         $task = $this->createTask(['todo_list_id' => $list->id]);
-        $this->createTask(['todo_list_id' => 2]);
+        $this->createTask(['todo_list_id' => $list2->id]);
 
         //action
 

@@ -41,6 +41,10 @@ class TodoListController extends Controller
 
     public function destroy(TodoList $todo_list)
     {
+        //   $todo_list->tasks->each->delete();
+
+        //clean way than above but instead we create the boot method inside the todolist Model
+
         $todo_list->delete();
         return response('', Response::HTTP_NO_CONTENT);
     }
