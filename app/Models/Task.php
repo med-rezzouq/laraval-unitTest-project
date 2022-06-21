@@ -11,5 +11,5 @@ class Task extends Model
 
     //there is guarded means we allow all
     //if we define fillable we choose only fields that can be added
-    protected $guarded = [];
+    protected $fillable = ['title', 'todo_list_id'];
 }
