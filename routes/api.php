@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TodoListController;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,10 @@ Route::post('task/completed', [TaskController::class, 'store'])->name('task.stor
 // Route::get('task', [TaskController::class, 'index'])->name('task.index');
 // Route::post('task', [TaskController::class, 'store'])->name('task.store');
 // Route::delete('task/{task}', [TaskController::class, 'destroy'])->name('task.destroy');
+
+
+
+
+///////////////register routes
+
+Route::post('/register', RegisterController::class)->name('user.register');
