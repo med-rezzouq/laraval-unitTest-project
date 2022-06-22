@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TodoListRequest;
 use App\Models\TodoList;
 use Illuminate\Http\Request;
+
 use Symfony\Component\HttpFoundation\Response;
 
 class TodoListController extends Controller
@@ -13,7 +14,10 @@ class TodoListController extends Controller
 
     public function index()
     {
-        $lists = TodoList::all();
+        // $lists = TodoList::whereUserId(auth()->id())->get();
+
+        //we use this instead of the above
+        $lists = auth()->user()->todo_lists;
         return response($lists);
     }
 
@@ -31,8 +35,15 @@ class TodoListController extends Controller
 
     public function store(TodoListRequest $request)
     {
-        $request->validate(['name' => ['required']]);
-        $list = TodoList::create($request->all());
+
+        // $request['user_id'] = auth()->id();
+        // $request->validate(['name' => ['required']]);
+        // $list = TodoList::create($request->all());
+
+        //we use this instead of the above
+        $list = auth()->user()->todo_lists()->create($request->validated());
+
+
         //or       $list = TodoList::create(['name' => $request->name]);
         return response($list, Response::HTTP_CREATED);
         //or we can do very simply it contain status code also
