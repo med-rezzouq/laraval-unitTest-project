@@ -15,7 +15,7 @@ class Task extends Model
     public const PENDING = 'pending';
     //there is guarded means we allow all
     //if we define fillable we choose only fields that can be added
-    protected $fillable = ['title', 'todo_list_id', 'status', 'description'];
+    protected $fillable = ['title', 'todo_list_id', 'status', 'description', 'label_id'];
 
     public function todo_list(): BelongsTo
     {
