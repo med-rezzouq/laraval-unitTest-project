@@ -25,6 +25,8 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->text('description')->nullable();
+            // $table->foreignId('label_id')->constrained();
             $table->string('status')->default(Task::NOT_STARTED);
             $table->timestamps();
         });
