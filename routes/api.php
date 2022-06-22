@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\LabelController;
+use App\Http\Controllers\WebServiceController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TodoListController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route::delete('task/{task}', [TaskController::class, 'destroy'])->name('task.destroy');
 
     Route::apiResource('label', LabelController::class);
+
+    //////// google drive api routes////
+
+    Route::get('/web-service/connect{name}', [WebServiceController::class, 'connect'])->name('service.connect');
+    Route::post('/web-service/callback', [WebServiceController::class, 'callback'])->name('service.callback');
 });
 
 
