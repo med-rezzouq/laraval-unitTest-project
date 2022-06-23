@@ -9,5 +9,5 @@ class WebService extends Model
 {
     use HasFactory;
 
-    protected $quarded = [];
+    protected $guarded = [];
 }
