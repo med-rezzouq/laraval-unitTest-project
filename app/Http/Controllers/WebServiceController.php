@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\WebService;
 use Illuminate\Http\Request;
+use Google\Client;
 
 class WebServiceController extends Controller
 {
@@ -34,21 +35,23 @@ class WebServiceController extends Controller
     public function callback(Request $request)
     {
 
-
-        $client = new Client();
+        //we wrap client inside app because to simulate the real test of laravel so like the app launched by boot container 
+        $client = app(Client::class);
         $config = config('services.google');
         $client->setClientId($config['id']);
         $client->setClientSecret($config['secret']);
         $client->setRedirectUri($config['redirect_url']);
 
         $access_token = $client->fetchAccessTokenWithAuthCode($request->code);
+
         $service =    WebService::create([
             'user_id' => auth()->id(),
             'token' => json_encode([
                 'access_token' => $access_token,
-                'name' => 'google-drive'
-            ])
+
+            ]),  'name' => 'google-drive'
         ]);
+        // dd(['hello' => "world"]);
         return   $service;
     }
 }
