@@ -16,15 +16,15 @@ class WebServiceController extends Controller
     ];
 
 
-    public function connect($name)
+    public function connect($name, Client $client)
     {
 
         if ($name == 'google-drive') {
-            $client = new Client();
-            $config = config('services.google');
-            $client->setClientId($config['id']);
-            $client->setClientSecret($config['secret']);
-            $client->setRedirectUri($config['redirect_url']);
+            // $client = new Client();
+            // $config = config('services.google');
+            // $client->setClientId($config['id']);
+            // $client->setClientSecret($config['secret']);
+            // $client->setRedirectUri($config['redirect_url']);
             $client->setScopes(self::DRIVE_SCOPES);
 
             $url =   $client->createAuthUrl();
@@ -32,15 +32,15 @@ class WebServiceController extends Controller
         }
     }
 
-    public function callback(Request $request)
+    public function callback(Request $request, Client $client)
     {
 
         //we wrap client inside app because to simulate the real test of laravel so like the app launched by boot container 
-        $client = app(Client::class);
-        $config = config('services.google');
-        $client->setClientId($config['id']);
-        $client->setClientSecret($config['secret']);
-        $client->setRedirectUri($config['redirect_url']);
+        // $client = app(Client::class);
+        // $config = config('services.google');
+        // $client->setClientId($config['id']);
+        // $client->setClientSecret($config['secret']);
+        // $client->setRedirectUri($config['redirect_url']);
 
         $access_token = $client->fetchAccessTokenWithAuthCode($request->code);
 
