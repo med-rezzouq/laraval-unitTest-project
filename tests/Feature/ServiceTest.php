@@ -24,8 +24,14 @@ class ServiceTest extends TestCase
     }
     public function test_a_user_can_connect_to_a_service_and_token_is_stored()
     {
+        $this->mock(Client::class, function (MockInterface $mock) {
+            $mock->shouldReceive('setScopes');
+            $mock->shouldReceive('createAuthUrl')->andReturn('http://localhost');
+        });
 
         $response = $this->getJson(route('web-service.connect', 'google-drive'))->assertOk()->json();
+
+        $this->assertEquals($response['url'], 'http://localhost');
         $this->assertNotNull($response['url']);
         return $response;
     }
@@ -34,11 +40,6 @@ class ServiceTest extends TestCase
     {
 
         $this->mock(Client::class, function (MockInterface $mock) {
-
-            $mock->shouldReceive('setClientId')->once();
-
-            $mock->shouldReceive('setClientSecret')->once();
-            $mock->shouldReceive('setRedirectUri')->once();
             $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn('fake-token');
         });
 
