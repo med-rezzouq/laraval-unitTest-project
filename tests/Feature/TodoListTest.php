@@ -38,11 +38,11 @@ class TodoListTest extends TestCase
 
 
         //action / perform
-        $response = $this->getJson(route('todo-list.index'));
+        $response = $this->getJson(route('todo-list.index'))->json();
 
         //assertion /predict
-        $this->assertEquals(1, count($response->json()));
-        $this->assertEquals('my list', $response->json()[0]['name']);
+        $this->assertEquals(1, count($response));
+        $this->assertEquals('my list', $response[0]['name']);
     }
 
 
@@ -54,7 +54,9 @@ class TodoListTest extends TestCase
         //preparation / prepare
         // $list = TodoList::factory()->create(); //replaces with setUp
         //action / perform
-        $response = $this->getJson(route('todo-list.show',  $this->list->id))->assertOk()->json();
+        $response = $this->getJson(route('todo-list.show',  $this->list->id))
+            ->assertOk()
+            ->json('data');
         //assertion /predict
         // $response->assertStatus(200);
         //$response->assertOk();
@@ -73,7 +75,9 @@ class TodoListTest extends TestCase
         //make() will create  a record without storing it in database
         $list = TodoList::factory()->make();
         //action
-        $response = $this->postJson(route('todo-list.store', ['name' => $list->name]))->assertCreated()->json();
+        $response = $this->postJson(route('todo-list.store', ['name' => $list->name]))
+            ->assertCreated()
+            ->json('data');
 
 
         //assertion
