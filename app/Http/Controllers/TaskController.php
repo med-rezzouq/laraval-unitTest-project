@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Models\TodoList;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class TaskController extends Controller
 
         //instead of doing the above line 
         $tasks = $todo_list->tasks;
-        return response($tasks);
+        return TaskResource::collection($tasks);
     }
 
     public function store(TaskRequest $request, TodoList $todo_list)
@@ -31,7 +32,7 @@ class TaskController extends Controller
 
         //instead of the top 2 lines since we have relationship we can store it like this
         $task = $todo_list->tasks()->create($request->validated());
-        return $task;
+        return new TaskResource($task);
     }
 
     public function destroy(Task $task)
