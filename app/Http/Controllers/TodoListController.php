@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TodoListRequest;
+use App\Http\Resources\TodoListResource;
 use App\Models\TodoList;
 use Illuminate\Http\Request;
 
@@ -18,13 +19,13 @@ class TodoListController extends Controller
 
         //we use this instead of the above
         $lists = auth()->user()->todo_lists;
-        return response($lists);
+        return  TodoListResource::collection($lists);
     }
 
     public function show($id)
     {
         $list = TodoList::findOrFail($id);
-        return response($list);
+        return new TodoListResource($list);;
     }
 
     //show cleanest with typehinted that will search automatically the parameter
@@ -36,18 +37,20 @@ class TodoListController extends Controller
     public function store(TodoListRequest $request)
     {
 
+
+
         // $request['user_id'] = auth()->id();
         // $request->validate(['name' => ['required']]);
         // $list = TodoList::create($request->all());
 
         //we use this instead of the above
-        $list = auth()->user()->todo_lists()->create($request->validated());
+        $todo_list = auth()->user()->todo_lists()->create($request->validated());
 
 
         //or       $list = TodoList::create(['name' => $request->name]);
-        return response($list, Response::HTTP_CREATED);
+
         //or we can do very simply it contain status code also
-        return $list;
+        return new TodoListResource($todo_list);
     }
 
     public function destroy(TodoList $todo_list)
@@ -66,6 +69,6 @@ class TodoListController extends Controller
         // $request->validate();
 
         $todo_list->update($request->all());
-        return response($todo_list);
+        return new TodoListResource($todo_list);
     }
 }
