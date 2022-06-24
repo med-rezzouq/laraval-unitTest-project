@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //////// google drive api routes////
 
-    Route::get('/web-service/connect{name}', [WebServiceController::class, 'connect'])->name('web-service.connect');
+    Route::get('/web-service/connect/{name}', [WebServiceController::class, 'connect'])->name('web-service.connect');
     Route::post('/web-service/callback', [WebServiceController::class, 'callback'])->name('web-service.callback');
     Route::post('/web-service/{web_service}', [WebServiceController::class, 'store'])->name('web-service.store');
 });

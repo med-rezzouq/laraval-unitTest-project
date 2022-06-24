@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Client::class, function () {
 
-            $client = app(Client::class);
+            $client = new Client();
             $config = config('services.google');
             $client->setClientId($config['id']);
             $client->setClientSecret($config['secret']);
