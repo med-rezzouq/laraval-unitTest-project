@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Models\WebService;
+use App\Services\GoogleDrive;
+use App\Services\Zipper;
 use Illuminate\Http\Request;
 use Google\Client;
 use Google\Service;
@@ -61,7 +63,7 @@ class WebServiceController extends Controller
         return   $service;
     }
 
-    public function store(Request $request, WebService $web_service, Client $client)
+    public function store(WebService $web_service, GoogleDrive $drive)
     {
 
         //we need to fetch last 7 days of tasks
@@ -71,42 +73,16 @@ class WebServiceController extends Controller
         $jsonFileName = 'task_dump.json';
         Storage::put("/public/temp/$jsonFileName", TaskResource::collection($tasks)->toJson());
 
+        $zipFileName = Zipper::createZipof($jsonFileName);
         //create a zip file with this json file
-        $zip = new ZipArchive();
 
-
-        $zipFileName =  storage_path('app/public/temp/' . now()->timestamp . '-task.zip');
-        if ($zip->open($zipFileName, ZipArchive::CREATE) == true) {
-            $filePath =  storage_path('app/public/temp/' . $jsonFileName);
-            $zip->addFile($filePath, $jsonFileName);
-        }
-        $zip->close();
         //send this zip to drive
 
 
         $access_token = $web_service->token['access_token'];
 
-        $client->setAccessToken($access_token);
-        $service = new Drive($client);
-        $file = new DriveFile();
-
-        // DEFINE("TESTFILE", 'testfile-small.txt');
-        // if (!file_exists(TESTFILE)) {
-        //     $fh = fopen(TESTFILE, 'w');
-        //     fseek($fh, 1024 * 1024);
-        //     fwrite($fh, "!", 1);
-        //     fclose($fh);
-        // }
-
-        $file->setName("Helloworld.zip");
-        $result2 = $service->files->create(
-            $file,
-            [
-                'data' => file_get_contents($zipFileName),
-                'mimeType' => 'application/octet-stream',
-                'uploadType' => 'multipart'
-            ]
-        );
+        $drive->uploadFile($zipFileName, $access_token);
+        // Storage::deleteDirectory('public/temp');
         return response('uploaded', Response::HTTP_CREATED);
     }
 }
