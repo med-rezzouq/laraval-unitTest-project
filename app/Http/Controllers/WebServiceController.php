@@ -80,12 +80,13 @@ class WebServiceController extends Controller
         $zipFileName =  storage_path('app/public/temp/' . now()->timestamp . '-task.zip');
         if ($zip->open($zipFileName, ZipArchive::CREATE) == true) {
             $filePath =  storage_path('app/public/temp/' . $jsonFileName);
-            $zip->addFile($filePath);
+            $zip->addFile($filePath, $jsonFileName);
         }
         $zip->close();
         //send this zip to drive
 
-        $access_token = $web_service->token['access_token'];
+        $token = json_decode($web_service->token, true);
+        $access_token = $token['access_token']['access_token'];
 
         $client->setAccessToken($access_token);
         $service = new Drive($client);
@@ -99,7 +100,7 @@ class WebServiceController extends Controller
         //     fclose($fh);
         // }
 
-        $file->setName("Hello World!");
+        $file->setName("Helloworld.zip");
         $result2 = $service->files->create(
             $file,
             [
