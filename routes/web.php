@@ -35,13 +35,15 @@ Route::get('/drive', function () {
 
 
 Route::get('/google-drive/callback', function () {
-    $client = new Client();
-    $client->setClientId('1082134821049-6k5d3k5goca9i47kl9cfgg8bnu8erjip.apps.googleusercontent.com');
-    $client->setClientSecret('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');
-    $client->setRedirectUri('http://localhost:8000/google-drive/callback');
-    $code = request('code');
-    $access_token = $client->fetchAccessTokenWithAuthCode($code);
-    return   $access_token;
+
+    return request('code');
+    // $client = new Client();
+    // $client->setClientId('1082134821049-6k5d3k5goca9i47kl9cfgg8bnu8erjip.apps.googleusercontent.com');
+    // $client->setClientSecret('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');
+    // $client->setRedirectUri('http://localhost:8000/google-drive/callback');
+    // $code = request('code');
+    // $access_token = $client->fetchAccessTokenWithAuthCode($code);
+    // return   $access_token;
 });
 
 

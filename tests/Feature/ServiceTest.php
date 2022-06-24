@@ -53,8 +53,8 @@ class ServiceTest extends TestCase
 
         $this->assertDatabaseHas('web_services', [
             'user_id' => $this->user->id,
-            'token' => "{\"access_token\":\"fake-token\"}",
-            // 'token' => "\"{\\\"access_token\\\":\\\"fake-token\\\"}\""
+            // 'token' => "{\"access_token\":\"fake-token\"}",
+            'token' => "\"{\\\"access_token\\\":\\\"fake-token\\\"}\""
         ]);
         // $this->assertNotNull($this->user->services->first()->token);
     }
