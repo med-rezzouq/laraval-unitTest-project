@@ -68,7 +68,7 @@ class WebServiceController extends Controller
 
         //we need to fetch last 7 days of tasks
         $tasks = Task::where('created_at', '>=', now()->subDays(7))->get();
-        // dd($tasks);
+
         //create a json file with this data
         $jsonFileName = 'task_dump.json';
         Storage::put("/public/temp/$jsonFileName", TaskResource::collection($tasks)->toJson());
